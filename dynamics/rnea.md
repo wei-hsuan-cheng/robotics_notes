@@ -142,7 +142,7 @@ Both produce the same final gravity torques.
 Once $V_i$ and $A_i$ are known, the required body wrench of link $i$ is:
 
 $$
-F_i^{body} = G_i A_i + ad_{V_i}^*(G_i V_i)
+F_i^{\text{body}} = G_i A_i + ad_{V_i}^*(G_i V_i)
 $$
 
 If an external wrench $F_i^{ext}$ acts on the link, subtract it:
