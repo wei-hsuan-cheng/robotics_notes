@@ -10,7 +10,7 @@
 The **Recursive Newton–Euler Algorithm (RNEA)** computes the inverse dynamics of a robot:
 
 $$
-\tau = ID(q, \dot q, \ddot q)
+\tau = \text{ID}(\text{model}, \, q, \, \dot q, \, \ddot q)
 $$
 
 That is, given:
@@ -36,6 +36,12 @@ In modern robotics language:
 - instantaneous transport of twists uses $ad$,
 - instantaneous transport of wrenches uses $ad^*$.
 
+A useful picture to keep in mind is the generic serial kinematic chain below <a href="#fs08">[1]</a>. It matches the parent-child recursion used by RNEA: each joint $i$ connects body $i-1$ to body $i$, and the joint screw axis $S_i$ in the equations below is the same geometric object sketched as $s_i$ in the figure.
+
+![Generic serial kinematic chain used to interpret the RNEA recursions.](./kinematic_chain.png)
+
+In the rest of this note, we use the body-frame convention, so $S_i$ is expressed in the child/body frame of link $i$.
+
 ---
 
 ## 2. Objects and notation
@@ -45,7 +51,7 @@ For link $i$:
 - $V_i \in \mathbb{R}^6$: body twist of link $i$, expressed in the body frame of link $i$
 - $A_i \in \mathbb{R}^6$: body acceleration of link $i$, expressed in the body frame of link $i$
 - $F_i \in \mathbb{R}^6$: body wrench acting on link $i$
-- $G_i \in \mathbb{R}^{6\times 6}$: body spatial inertia of link $i$
+- $I_i \in \mathbb{R}^{6\times 6}$: body spatial inertia of link $i$
 - $S_i \in \mathbb{R}^6$: **body screw axis** of joint $i$, expressed in the child/body frame
 - $\lambda(i)$: parent index of body $i$
 - $\text{children}(i)$: children of body $i$
@@ -142,20 +148,20 @@ Both produce the same final gravity torques.
 Once $V_i$ and $A_i$ are known, the required body wrench of link $i$ is:
 
 $$
-F_i^{\text{body}} = G_i A_i + ad_{V_i}^*(G_i V_i)
+F_i^{\text{body}} = I_i A_i + ad_{V_i}^*(I_i V_i)
 $$
 
 If an external wrench $F_i^{ext}$ acts on the link, subtract it:
 
 $$
-F_i = G_i A_i + ad_{V_i}^*(G_i V_i) - F_i^{ext}
+F_i = I_i A_i + ad_{V_i}^*(I_i V_i) - F_i^{ext}
 $$
 
 Interpretation:
 
-- $G_i A_i$: inertial wrench from acceleration
-- $G_i V_i$: momentum
-- $ad_{V_i}^*(G_i V_i)$: bias wrench caused by differentiating momentum in a moving body frame
+- $I_i A_i$: inertial wrench from acceleration
+- $I_i V_i$: momentum
+- $ad_{V_i}^*(I_i V_i)$: bias wrench caused by differentiating momentum in a moving body frame
 
 ### Insight
 
@@ -213,7 +219,7 @@ A_i = Ad_{T_{i,\lambda(i)}} A_{\lambda(i)} + S_i \ddot q_i + ad_{V_i}(S_i \dot q
 $$
 
 $$
-F_i = G_i A_i + ad_{V_i}^*(G_i V_i) - F_i^{ext}
+F_i = I_i A_i + ad_{V_i}^*(I_i V_i) - F_i^{ext}
 $$
 
 ### Backward pass
@@ -313,13 +319,13 @@ Now the convective term is generally nonzero, because link 2 sees a mix of inher
 Link 2 body wrench:
 
 $$
-F_2 = G_2 A_2 + ad_{V_2}^*(G_2 V_2) - F_2^{ext}
+F_2 = I_2 A_2 + ad_{V_2}^*(I_2 V_2) - F_2^{ext}
 $$
 
 Link 1 body wrench:
 
 $$
-F_1 = G_1 A_1 + ad_{V_1}^*(G_1 V_1) - F_1^{ext}
+F_1 = I_1 A_1 + ad_{V_1}^*(I_1 V_1) - F_1^{ext}
 $$
 
 ### 10.5 Wrench backward pass
@@ -373,14 +379,14 @@ RNEA follows causality:
 
 ### Insight 2: body coordinates make inertia constant
 
-Body spatial inertia $G_i$ is constant in the body frame. This is a major reason the algorithm is efficient.
+Body spatial inertia $I_i$ is constant in the body frame. This is a major reason the algorithm is efficient.
 
 ### Insight 3: nonlinear terms appear locally
 
 Instead of one giant symbolic $C(q,\dot q)\dot q$, RNEA encodes nonlinear rigid-body effects locally through:
 
 - $ad_{V_i}(S_i \dot q_i)$
-- $ad_{V_i}^*(G_i V_i)$
+- $ad_{V_i}^*(I_i V_i)$
 
 ### Insight 4: joint torque is a projection, not the whole wrench
 
@@ -648,7 +654,7 @@ This is the clean bridge between:
 | body twist $V_i$ | $v_i$ |
 | body acceleration $A_i$ | $a_i$ |
 | body wrench $F_i$ | $f_i$ |
-| body spatial inertia $G_i$ | $I_i$ |
+| body spatial inertia $I_i$ | $I_i$ |
 | body screw axis $S_i$ | $S_i$ |
 | parent index $\lambda(i)$ | $\lambda(i)$ |
 | child set | $\mu(i)$ |
@@ -670,7 +676,7 @@ A_i = Ad_{T_{i,\lambda(i)}} A_{\lambda(i)} + S_i \ddot q_i + ad_{V_i}(S_i \dot q
 $$
 
 $$
-F_i = G_i A_i + ad_{V_i}^*(G_i V_i) - F_i^{ext}
+F_i = I_i A_i + ad_{V_i}^*(I_i V_i) - F_i^{ext}
 $$
 
 $$
