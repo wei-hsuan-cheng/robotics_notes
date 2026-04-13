@@ -211,7 +211,49 @@ $$
 \tau_i \dot q_i = (\mathcal{F}_i^{\uparrow})^T (S_i \dot q_i)
 $$
 
-So $S_i$ selects the wrench component conjugate to the allowed joint motion.
+So $S_i$ selects the wrench component along the allowed joint motion subspace.
+
+### Insight: actuator effort versus reaction load
+
+The full transmitted wrench $\mathcal{F}_i^{\uparrow}$ does **not** need to be supplied by actuator torque alone.
+
+- $\tau_i = S_i^T \mathcal{F}_i^{\uparrow}$ extracts only the component along the joint's allowed motion subspace.
+- The remaining components are **reaction wrench** components enforced by the joint constraints and carried structurally by the links, bearings, and housing.
+- Those reaction loads are passed into the parent link, combined with that link's own load, and then transmitted further upward by the same backward recursion.
+- As a result, the base/support sees the final net support wrench of the whole chain.
+
+Write the reaction part as a residual wrench $\mathcal{R}_i$ such that
+
+$$
+S_i^T \mathcal{R}_i = 0.
+$$
+
+Then the motor supplies only the component along the joint's allowed motion subspace
+
+$$
+\tau_i = S_i^T \mathcal{F}_i^{\uparrow},
+$$
+
+while the residual reaction part is still physically transmitted through the joint structure.
+
+> The actuator supplies only the wrench component along the joint's allowed motion subspace, while the remaining constrained wrench components are carried structurally as reaction loads and transmitted to more proximal links and ultimately to the base/support.
+
+### Example: fully stretched arm under axial end-effector force
+
+Consider an ideal serial arm that is fully stretched, and suppose a pure end-effector force is applied exactly along the arm's own axis.
+
+In that special case:
+
+- the line of action can pass through the joint axes so the moment about each joint axis is zero,
+- the corresponding joint torques from that axial force can therefore be zero or very small,
+- but the load is still physically present: it is carried as axial reaction load through the links and joints and finally into the base/support.
+
+So the correct statement is not that the load disappears, but that this particular wrench lies largely in the **reaction-load directions** rather than in the actuator-effort directions.
+
+This is also why singular configurations can be deceptive:
+
+- motion authority in some task-space directions becomes poor,
+- yet certain external loads in those same directions can still be carried efficiently by the mechanism as structural load.
 
 ---
 
@@ -368,8 +410,8 @@ $$
 ### 10.6 What this example shows
 
 - The **forward pass** builds link motion recursively:
-  - link 2 twist depends on link 1 twist
-  - link 2 acceleration depends on link 1 acceleration plus a motion-induced correction
+  - link 2 twist depends on its own joint twist and link 1 twist
+  - link 2 acceleration depends on its own joint acceleration, and link 1 acceleration plus a motion-induced correction
 - The **backward pass** builds subtree wrench recursively:
   - link 2 contributes to joint 2 torque directly
   - its required wrench is transformed and added to link 1's wrench
