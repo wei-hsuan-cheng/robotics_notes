@@ -1,0 +1,26 @@
+# Robotics Notes
+
+My personal robotics notes focused on dynamics, modeling, and control-oriented derivations.
+
+The goal of this repository is to keep short, self-contained technical notes that are:
+
+- mathematically explicit
+- readable without too much surrounding project context
+- practical for robotics implementation work
+
+
+## Repository Layout
+
+```text
+robotics_notes/
+├── README.md
+└── dynamics/
+    └── zmp/
+    └── rnea/
+```
+
+## Contact
+
+- **Author**: Wei-Hsuan Cheng [(johnathancheng0125@gmail.com)](mailto:johnathancheng0125@gmail.com)
+- **Homepage**: [wei-hsuan-cheng](https://wei-hsuan-cheng.github.io)
+- **GitHub**: [wei-hsuan-cheng](https://github.com/wei-hsuan-cheng)
