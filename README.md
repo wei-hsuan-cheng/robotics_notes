@@ -1,6 +1,6 @@
 # Robotics Notes
 
-My personal robotics notes focused on dynamics, modeling, and control-oriented derivations.
+My personal robotics notes focused on kinematics, dynamics, modeling, and control-oriented derivations.
 
 The goal of this repository is to keep short, self-contained technical notes that are:
 
@@ -14,9 +14,13 @@ The goal of this repository is to keep short, self-contained technical notes tha
 ```text
 robotics_notes/
 ├── README.md
-└── dynamics/
-    └── zmp/
-    └── rnea/
+├── dynamics/
+│   ├── rnea/
+│   │   └── rnea.md
+│   └── zmp/
+│       └── zmp.md
+└── kinematics/
+    └── singularity_and_manipulability.md
 ```
 
 ## Contact
