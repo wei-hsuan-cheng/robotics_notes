@@ -11,17 +11,13 @@ The goal of this repository is to keep short, self-contained technical notes tha
 
 ## Repository Layout
 
-```text
-robotics_notes/
-├── README.md
-├── dynamics/
-│   ├── rnea/
-│   │   └── rnea.md
-│   └── zmp/
-│       └── zmp.md
-└── kinematics/
-    └── singularity_and_manipulability.md
-```
+- MPC
+  - [SLQ-MPC](mpc/solver/slq_mpc.md)
+- Dynamics
+  - [Recursive Newton-Euler Algorithm (RNEA)](dynamics/rnea/rnea.md)
+  - [Zero Moment Point (ZMP)](dynamics/zmp/zmp.md)
+- Kinematics
+  - [Singularity and Manipulability](kinematics/singularity_and_manipulability.md)
 
 ## Contact
 
