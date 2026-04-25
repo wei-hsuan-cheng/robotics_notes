@@ -28,8 +28,7 @@ So:
 
 - $w(q) > 0$ when the selected task Jacobian has full row rank,
 - $w(q) = 0$ exactly at a singular configuration for that selected task,
-- small $w(q)$ means the robot is close to a singular or poorly conditioned
-  configuration.
+- small $w(q)$ means the robot is close to a singular or poorly conditioned configuration.
 
 This turns the singularity avoidance problem into a scalar inequality problem: instead of reasoning directly about rank deficiency, we can keep the robot away from singularity by enforcing a lower bound on $w$.
 
@@ -121,7 +120,6 @@ First define $M_i := e^{-\hat{S}_n\theta_n}\cdots e^{-\hat{S}_{i+1}\theta_{i+1}}
   $$
   \frac{\partial \hat{J}_i}{\partial \theta_j} = \big[\,(\partial M_i/\partial\theta_j) M_i^{-1},\; \hat{J}_i\,\big].
   $$
-  In our PoE setting, $(\partial M_i/\partial\theta_j) M_i^{-1} = -\hat{J}_j$ for $j>i$, which recovers the compact identity above. Note this derivation is purely algebraic (derivative of a similarity transform) and does not rely on Lie‑group specifics, though here $Q\in\mathfrak{se}(3)$.
 
   </details>
 
